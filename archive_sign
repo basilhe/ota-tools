@@ -55,21 +55,25 @@ EOF
  
 cp "Entitlements.plist" "Products/Applications/$APP_NAME.app/Entitlements.plist"
  
-NEW_BUNDLE_IDENTIFIER=`egrep -a -A 2 application-identifier $PROVISIONING_FILE | grep string | sed -e 's/<string>//' -e 's/<\/string>//' -e 's/ //' | awk '{split($0,a,"."); print a[2] "." a[3] "." a[4]}'`
+NEW_BUNDLE_IDENTIFIER=`egrep -a -A 2 application-identifier $PROVISIONING_FILE | grep string | sed -e 's/<string>//' -e 's/<\/string>//' -e 's/ //' | awk '{split($0,a,"."); print substr($0, index($0, a[2]))}'`
  
-echo "New bundle ID: " $NEW_BUNDLE_IDENTIFIER
+if [ "$NEW_BUNDLE_IDENTIFIER" != "*" ]; then
+	echo "New bundle ID: " $NEW_BUNDLE_IDENTIFIER
  
-# change the top level Plist
-/usr/libexec/PlistBuddy -c "Set:ApplicationProperties:CFBundleIdentifier $NEW_BUNDLE_IDENTIFIER" Info.plist
+	# change the top level Plist
+	/usr/libexec/PlistBuddy -c "Set:ApplicationProperties:CFBundleIdentifier $NEW_BUNDLE_IDENTIFIER" Info.plist
  
-# change the bundle ID in the embedded Info.plist 
-/usr/libexec/PlistBuddy -c "Set:CFBundleIdentifier $NEW_BUNDLE_IDENTIFIER" "Products/Applications/$APP_NAME.app/Info.plist"
- 
+	# change the bundle ID in the embedded Info.plist 
+	/usr/libexec/PlistBuddy -c "Set:CFBundleIdentifier $NEW_BUNDLE_IDENTIFIER" "Products/Applications/$APP_NAME.app/Info.plist"
+
+fi; 
+
 /usr/bin/codesign -f -s "$SIGNING_IDENTITY" --resource-rules="Products/Applications/$APP_NAME.app/ResourceRules.plist" --entitlements Entitlements.plist "Products/Applications/$APP_NAME.app"
  
 echo "source app name: " "Products/Applications/$APP_NAME.app"
 echo "output app name: " $OUTPUT_APP_NAME
 echo "signing identity: " "$SIGNING_IDENTITY"
 echo "profile name: " "$PROVISIONING_FILE"
+
 /usr/bin/xcrun -sdk iphoneos PackageApplication -v "Products/Applications/$APP_NAME.app" -o $OUTPUT_APP_NAME --sign "$SIGNING_IDENTITY" --embed "$PROVISIONING_FILE"
 
