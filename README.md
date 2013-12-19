@@ -14,6 +14,7 @@ under the MIT license.
 
     ipa_ota    - generate basic plist and html combo for ota hosting
     ipa_sign   - sign ipa with a keychain certificate and replace its provision
+    archive_sign   - sign saved archive with a keychain certificate and replace its provision
     app.plist  - simple plist example
     index.html - simple hosting flatfile example
 
@@ -26,6 +27,10 @@ under the MIT license.
     App has provision   'iPhone Developer', which supports 'HDXJ2G3FGJ.com.example.*'
     Embedding provision 'provision for My App', which supports 'HDXJ2G3FGJ.com.example.myapp'
     Payload/myapp.app: replacing existing signature
+
+**archive_sign** takes an saved archive, provision file, and the name of the certificate in your keychain that you want to sign with.
+
+    ~/Dropbox/Public/enterprise_builds rbronosky$ ./archive_sign "iPhone Distribution: Huge Enterprises Inc." ~/provisions/Huge_Enterprises.mobileprovision ~/Downloads/app.ipa 
 
 Calling **ipa_ota** creates a basic plist in the current directory and outputs a single line for including in an existing HTML file.
 
