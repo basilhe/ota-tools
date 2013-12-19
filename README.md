@@ -29,8 +29,8 @@ under the MIT license.
     Payload/myapp.app: replacing existing signature
 
 **archive_sign** takes an saved archive, provision file, and the name of the certificate in your keychain that you want to sign with.
-
-    ~/Dropbox/Public/enterprise_builds rbronosky$ ./archive_sign "iPhone Distribution: Huge Enterprises Inc." ~/provisions/Huge_Enterprises.mobileprovision ~/Downloads/app.ipa 
+    ~/Dropbox/Public/enterprise_builds rbronosky$ cd App.xcarchive
+    ~/Dropbox/Public/enterprise_builds/App.xcarchive rbronosky$ ./archive_sign "iPhone Distribution: Huge Enterprises Inc." ~/provisions/Huge_Enterprises.mobileprovision ~/Downloads/app.ipa 
 
 Calling **ipa_ota** creates a basic plist in the current directory and outputs a single line for including in an existing HTML file.
 
